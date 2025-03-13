@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #0a0a0a;
+  --background: #1f1f1f;
+  --foreground: #e0e0e0;
 }
 
 @theme inline {
@@ -14,8 +14,8 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #121212;
+    --foreground: #d1d1d1;
   }
 }
 
@@ -25,33 +25,43 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+.tiptap {
+  background-color: #2b2b2b;
+  color: #e0e0e0;
+  border: none;
+  outline: none;
+  padding: 50px;
+  border-radius: 8px;
+}
+
+/* Headings */
 .tiptap h1 {
-  @apply text-6xl font-bold;
+  @apply text-6xl font-bold text-gray-300;
 }
 
 .tiptap h2 {
-  @apply text-5xl font-semibold;
+  @apply text-5xl font-semibold text-gray-300;
 }
 
 .tiptap h3 {
-  @apply text-4xl font-semibold;
+  @apply text-4xl font-semibold text-gray-400;
 }
 
 .tiptap h4 {
-  @apply text-3xl font-semibold;
+  @apply text-3xl font-semibold text-gray-400;
 }
 
 .tiptap h5 {
-  @apply text-2xl font-semibold;
+  @apply text-2xl font-semibold text-gray-500;
 }
 
 .tiptap h6 {
-  @apply text-xl font-semibold;
+  @apply text-xl font-semibold text-gray-500;
 }
 
 /* Blockquotes */
 .blockquote {
-  @apply border-l-4 border-gray-400 pl-4 italic text-gray-600;
+  @apply border-l-4 border-gray-500 pl-4 italic text-gray-400;
 }
 
 /* Strikethrough */
@@ -61,44 +71,45 @@ body {
 
 /* Lists */
 .tiptap ul {
-  @apply list-disc pl-5;
+  @apply list-disc pl-5 text-gray-300;
 }
 
 .tiptap ol {
-  @apply list-decimal pl-5;
+  @apply list-decimal pl-5 text-gray-300;
 }
 
 /* Code Blocks */
 .tiptap pre {
-  @apply bg-gray-900 text-white p-4 rounded-lg overflow-x-auto;
+  @apply bg-gray-800 text-gray-200 p-4 rounded-lg overflow-x-auto;
 }
 
 .tiptap code {
-  @apply bg-gray-900 text-white px-1 rounded;
+  @apply bg-gray-700 text-gray-200 px-1 rounded;
 }
 
 /* Horizontal Rule */
 .tiptap hr {
-  @apply border-t-2 border-gray-300 my-4;
+  @apply border-t-2 border-gray-600 my-4;
 }
 
 /* Links */
 .tiptap a {
-  @apply text-blue-600 underline;
+  @apply text-blue-400 underline;
 }
 
 /* Bold and Italic */
 .tiptap strong {
-  @apply font-bold;
+  @apply font-bold text-gray-300;
 }
 
 .tiptap em {
-  @apply italic;
+  @apply italic text-gray-300;
 }
 
 /* Highlighted text styles */
 .highlighted-text {
-  background-color: yellow;
+  background-color: #ffff00;
   padding: 2px 4px;
   border-radius: 3px;
+  color: #000000;
 }
