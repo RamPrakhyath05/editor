@@ -25,55 +25,80 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.tiptap {
-  background-color: #0a0a0a;
-  color: white;
-  border: none;
-  outline: none;
-}
-
-.tiptap-container {
-  background-color: #0a0a0a; 
-  border: 2px solid white;
-  padding: 10px;
-}
-
-
-.tiptap p {
-  @apply my-4 leading-relaxed;
-}
-
-/* Headings inside the editor */
 .tiptap h1 {
-  @apply text-6xl font-bold my-4;
+  @apply text-6xl font-bold;
 }
 
 .tiptap h2 {
-  @apply text-5xl font-semibold my-3;
+  @apply text-5xl font-semibold;
 }
 
 .tiptap h3 {
-  @apply text-4xl font-semibold my-2;
+  @apply text-4xl font-semibold;
 }
 
 .tiptap h4 {
-  @apply text-3xl font-medium my-2;
+  @apply text-3xl font-semibold;
 }
 
 .tiptap h5 {
-  @apply text-2xl font-medium my-1;
+  @apply text-2xl font-semibold;
 }
 
 .tiptap h6 {
-  @apply text-xl font-medium my-1;
+  @apply text-xl font-semibold;
 }
 
-/* Strike-through text */
+/* Blockquotes */
+.blockquote {
+  @apply border-l-4 border-gray-400 pl-4 italic text-gray-600;
+}
+
+/* Strikethrough */
 .tiptap s {
-  @apply line-through;
+  @apply line-through text-gray-500;
 }
 
-/* Custom paragraph class from Tiptap */
-.my-custom-paragraph {
-  @apply text-gray-800 dark:text-gray-300;
+/* Lists */
+.tiptap ul {
+  @apply list-disc pl-5;
+}
+
+.tiptap ol {
+  @apply list-decimal pl-5;
+}
+
+/* Code Blocks */
+.tiptap pre {
+  @apply bg-gray-900 text-white p-4 rounded-lg overflow-x-auto;
+}
+
+.tiptap code {
+  @apply bg-gray-900 text-white px-1 rounded;
+}
+
+/* Horizontal Rule */
+.tiptap hr {
+  @apply border-t-2 border-gray-300 my-4;
+}
+
+/* Links */
+.tiptap a {
+  @apply text-blue-600 underline;
+}
+
+/* Bold and Italic */
+.tiptap strong {
+  @apply font-bold;
+}
+
+.tiptap em {
+  @apply italic;
+}
+
+/* Highlighted text styles */
+.highlighted-text {
+  background-color: yellow;
+  padding: 2px 4px;
+  border-radius: 3px;
 }
