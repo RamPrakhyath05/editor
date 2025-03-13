@@ -2,7 +2,7 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #0a0a0a;
 }
 
 @theme inline {
@@ -24,6 +24,20 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.tiptap {
+  background-color: #0a0a0a;
+  color: white;
+  border: none;
+  outline: none;
+}
+
+.tiptap-container {
+  background-color: #0a0a0a; 
+  border: 2px solid white;
+  padding: 10px;
+}
+
 
 .tiptap p {
   @apply my-4 leading-relaxed;
