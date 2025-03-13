@@ -36,8 +36,8 @@ const Tiptap = () => {
   if (!editor) return null
 
   return (
-    <div className="border border-gray-300 p-4 rounded-lg shadow-md">
-      <EditorContent editor={editor} />
+    <div className="border border-black p-4 rounded-lg shadow-md">
+      <EditorContent editor={editor} className="focus:outline-none"/>
     </div>
   )
 }
