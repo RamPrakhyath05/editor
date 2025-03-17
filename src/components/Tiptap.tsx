@@ -18,6 +18,12 @@ import ListItem from '@tiptap/extension-list-item'
 import Link from '@tiptap/extension-link'
 import HardBreak from '@tiptap/extension-hard-break'
 import Highlight from '@tiptap/extension-highlight'
+import Collaboration from '@tiptap/extension-collaboration'
+import { TiptapCollabProvider } from '@hocuspocus/provider'
+import * as Y from 'yjs';
+import { useEffect } from 'react';
+
+const doc = new Y.Doc();
 
 const Tiptap = () => {
   const editor = useEditor({
@@ -59,27 +65,32 @@ const Tiptap = () => {
           class: 'highlighted-text',
         },
       }),
-      StarterKit,
+      Collaboration.configure({
+        document: doc,
+      }),
+      StarterKit.configure({
+        history:false,
+      }),
     ],
-    content: `
-      <h1>Heading 1</h1>
-      <h2>Heading 2</h2>
-      <p>Hello World!</p>
-      <p><strong>Bold text</strong> and <em>italic text</em></p>
-      <p><s>Strikethrough text</s></p>
-      <blockquote>Blockquote text</blockquote>
-      <ul>
-        <li>Bullet list item</li>
-        <li>Another item</li>
-      </ul>
-      <ol>
-        <li>Ordered list item</li>
-        <li>Another item</li>
-      </ol>
-      <pre><code>Code block</code></pre>
-      <hr />
-      <a href="https://example.com">Link example</a>
-    `,
+    // content: `
+    //   <h1>Heading 1</h1>
+    //   <h2>Heading 2</h2>
+    //   <p>Hello World!</p>
+    //   <p><strong>Bold text</strong> and <em>italic text</em></p>
+    //   <p><s>Strikethrough text</s></p>
+    //   <blockquote>Blockquote text</blockquote>
+    //   <ul>
+    //     <li>Bullet list item</li>
+    //     <li>Another item</li>
+    //   </ul>
+    //   <ol>
+    //     <li>Ordered list item</li>
+    //     <li>Another item</li>
+    //   </ol>
+    //   <pre><code>Code block</code></pre>
+    //   <hr />
+    //   <a href="https://example.com">Link example</a>
+    // `,
     editorProps: {
       attributes: {
         class: 'tiptap',
@@ -87,6 +98,26 @@ const Tiptap = () => {
     },
     immediatelyRender: false,
   })
+  
+  useEffect(() => {
+    const provider = new TiptapCollabProvider({
+      name: 'ashish', // Unique document identifier for syncing. This is your document name.
+      appId: '7j9y6m10', // Your Cloud Dashboard AppID or baseURL for on-premises
+      //token: 'notoken', // Your JWT token
+      document: doc,
+
+      onSynced() {
+        if (!doc.getMap('config').get('initialContentLoaded') && editor) {
+          doc.getMap('config').set('initialContentLoaded', true)
+
+          editor.commands.setContent(`
+          <p>This is a radically reduced version of Tiptap. It has support for a document, with paragraphs and text. That’s it. It’s probably too much for real minimalists though.</p>
+          <p>The paragraph extension is not really required, but you need at least one node. Sure, that node can be something different.</p>
+          `)
+        }
+      },
+    })
+  }, [])
 
   if (!editor) return null
 

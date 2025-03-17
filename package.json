@@ -9,12 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@hocuspocus/provider": "^2.15.2",
     "@tailwindcss/typography": "^0.5.16",
     "@tiptap/extension-blockquote": "^2.11.5",
     "@tiptap/extension-bold": "^2.11.5",
     "@tiptap/extension-bullet-list": "^2.11.5",
     "@tiptap/extension-code": "^2.11.5",
     "@tiptap/extension-code-block": "^2.11.5",
+    "@tiptap/extension-collaboration": "^2.11.5",
     "@tiptap/extension-document": "^2.11.5",
     "@tiptap/extension-hard-break": "^2.11.5",
     "@tiptap/extension-heading": "^2.11.5",
@@ -32,7 +34,11 @@
     "@tiptap/starter-kit": "^2.11.5",
     "next": "15.2.2",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "y-indexeddb": "^9.0.12",
+    "y-prosemirror": "^1.2.17",
+    "y-protocols": "^1.0.6",
+    "yjs": "^13.6.24"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
