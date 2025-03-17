@@ -1,5 +1,4 @@
 "use client"
-
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Document from '@tiptap/extension-document'
@@ -19,6 +18,7 @@ import ListItem from '@tiptap/extension-list-item'
 import Link from '@tiptap/extension-link'
 import HardBreak from '@tiptap/extension-hard-break'
 import Highlight from '@tiptap/extension-highlight'
+
 const Tiptap = () => {
   const editor = useEditor({
     extensions: [
@@ -91,7 +91,7 @@ const Tiptap = () => {
   if (!editor) return null
 
   return (
-  <div className="p-12 rounded-lg ">
+  <div className="p-8 rounded-lg ">
     <EditorContent editor={editor} className="focus:outline-none" />
   </div>
 
