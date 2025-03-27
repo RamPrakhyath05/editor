@@ -1,38 +1,45 @@
 "use client"
+import React, { useEffect, useMemo } from 'react'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-import Document from '@tiptap/extension-document'
-import Paragraph from '@tiptap/extension-paragraph'
-import Text from '@tiptap/extension-text'
-import Heading from '@tiptap/extension-heading'
-import Strike from '@tiptap/extension-strike'
-import Blockquote from '@tiptap/extension-blockquote'
-import Bold from '@tiptap/extension-bold'
-import Italic from '@tiptap/extension-italic'
-import Code from '@tiptap/extension-code'
-import CodeBlock from '@tiptap/extension-code-block'
-import HorizontalRule from '@tiptap/extension-horizontal-rule'
-import BulletList from '@tiptap/extension-bullet-list'
-import OrderedList from '@tiptap/extension-ordered-list'
-import ListItem from '@tiptap/extension-list-item'
-import Link from '@tiptap/extension-link'
-import HardBreak from '@tiptap/extension-hard-break'
-import Highlight from '@tiptap/extension-highlight'
+import * as Y from 'yjs'
+import { WebrtcProvider } from 'y-webrtc'
+import { IndexeddbPersistence } from 'y-indexeddb'
 import Collaboration from '@tiptap/extension-collaboration'
-import { TiptapCollabProvider } from '@hocuspocus/provider'
-import * as Y from 'yjs';
-import { useEffect } from 'react';
-import { IndexeddbPersistence } from "y-indexeddb"
-import { nanoid } from 'nanoid' 
 
-const fileID = nanoid(7);
-const doc = new Y.Doc();
+const Editor = () => {
+  // Create a stable Yjs document
+  const ydoc = useMemo(() => new Y.Doc(), [])
 
-const Tiptap = () => {
+  // Create WebRTC and IndexedDB providers
+  useEffect(() => {
+    const webrtcProvider = new WebrtcProvider('collaborative-room', ydoc)
+    const indexeddbProvider = new IndexeddbPersistence('my-document', ydoc)
+
+    // Optional: Log sync events
+    webrtcProvider.on('synced', (isSynced) => {
+      console.log('WebRTC synced:', isSynced)
+    })
+
+    indexeddbProvider.on('synced', () => {
+      console.log('IndexedDB sync complete')
+    })
+
+    // Cleanup providers on unmount
+    return () => {
+      webrtcProvider.destroy()
+      indexeddbProvider.destroy()
+    }
+  }, [ydoc])
+
+  // Create Tiptap editor
   const editor = useEditor({
     extensions: [
-      Document,
-      Paragraph.configure({
+      StarterKit.configure({ history: false }),
+      Collaboration.configure({
+        document: ydoc
+      }),
+    Paragraph.configure({
         HTMLAttributes: {
           class: 'my-custom-paragraph',
         },
@@ -68,68 +75,15 @@ const Tiptap = () => {
           class: 'highlighted-text',
         },
       }),
-      Collaboration.configure({
-        document: doc,
-      }),
-      StarterKit.configure({
-        history:false,
-      }),
     ],
-    // content: `
-    //   <h1>Heading 1</h1>
-    //   <h2>Heading 2</h2>
-    //   <p>Hello World!</p>
-    //   <p><strong>Bold text</strong> and <em>italic text</em></p>
-    //   <p><s>Strikethrough text</s></p>
-    //   <blockquote>Blockquote text</blockquote>
-    //   <ul>
-    //     <li>Bullet list item</li>
-    //     <li>Another item</li>
-    //   </ul>
-    //   <ol>
-    //     <li>Ordered list item</li>
-    //     <li>Another item</li>
-    //   </ol>
-    //   <pre><code>Code block</code></pre>
-    //   <hr />
-    //   <a href="https://example.com">Link example</a>
-    // `,
-    editorProps: {
-      attributes: {
-        class: 'tiptap',
-      },
-    },
-    immediatelyRender: false,
+    content: '<p>Start collaborating...</p>'
   })
-  
-  // useEffect(() => {
-  //   const provider = new TiptapCollabProvider({
-  //     name: 'ashish', // Unique document identifier for syncing. This is your document name.
-  //     appId: '7j9y6m10', // Your Cloud Dashboard AppID or baseURL for on-premises
-  //     //token: 'notoken', // Your JWT token
-  //     document: doc,
-  //
-  //     onSynced() {
-  //       if (!doc.getMap('config').get('initialContentLoaded') && editor) {
-  //         doc.getMap('config').set('initialContentLoaded', true)
-  //
-  //         editor.commands.setContent(`
-  //         <p>This is a radically reduced version of Tiptap. It has support for a document, with paragraphs and text. That’s it. It’s probably too much for real minimalists though.</p>
-  //         <p>The paragraph extension is not really required, but you need at least one node. Sure, that node can be something different.</p>
-  //         `)
-  //       }
-  //     },
-  //   })
-  // }, [])
-
-  if (!editor) return null
 
   return (
-  <div className="p-8 rounded-xl ">
-    <EditorContent editor={editor} className="focus:outline-none" />
-  </div>
-
+    <div className="p-4">
+      <EditorContent editor={editor} />
+    </div>
   )
 }
 
-export default Tiptap
+export default Editor

@@ -1,4 +1,4 @@
-import Tiptap from '../components/Tiptap'
+import Editor from '../components/Tiptap'
 import Sidebar from '../components/Sidebar.tsx'
 
 export default function Home() {
@@ -8,7 +8,7 @@ export default function Home() {
         <Sidebar />
       </div>
       <div className="bg-[#222222] flex-1 flex flex-col py-10">
-        <Tiptap />
+        <Editor />
       </div>
     </div>
   );
