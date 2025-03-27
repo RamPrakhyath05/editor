@@ -22,7 +22,10 @@ import Collaboration from '@tiptap/extension-collaboration'
 import { TiptapCollabProvider } from '@hocuspocus/provider'
 import * as Y from 'yjs';
 import { useEffect } from 'react';
+import { IndexeddbPersistence } from "y-indexeddb"
+import { nanoid } from 'nanoid' 
 
+const fileID = nanoid(7);
 const doc = new Y.Doc();
 
 const Tiptap = () => {
@@ -99,30 +102,30 @@ const Tiptap = () => {
     immediatelyRender: false,
   })
   
-  useEffect(() => {
-    const provider = new TiptapCollabProvider({
-      name: 'ashish', // Unique document identifier for syncing. This is your document name.
-      appId: '7j9y6m10', // Your Cloud Dashboard AppID or baseURL for on-premises
-      //token: 'notoken', // Your JWT token
-      document: doc,
-
-      onSynced() {
-        if (!doc.getMap('config').get('initialContentLoaded') && editor) {
-          doc.getMap('config').set('initialContentLoaded', true)
-
-          editor.commands.setContent(`
-          <p>This is a radically reduced version of Tiptap. It has support for a document, with paragraphs and text. That’s it. It’s probably too much for real minimalists though.</p>
-          <p>The paragraph extension is not really required, but you need at least one node. Sure, that node can be something different.</p>
-          `)
-        }
-      },
-    })
-  }, [])
+  // useEffect(() => {
+  //   const provider = new TiptapCollabProvider({
+  //     name: 'ashish', // Unique document identifier for syncing. This is your document name.
+  //     appId: '7j9y6m10', // Your Cloud Dashboard AppID or baseURL for on-premises
+  //     //token: 'notoken', // Your JWT token
+  //     document: doc,
+  //
+  //     onSynced() {
+  //       if (!doc.getMap('config').get('initialContentLoaded') && editor) {
+  //         doc.getMap('config').set('initialContentLoaded', true)
+  //
+  //         editor.commands.setContent(`
+  //         <p>This is a radically reduced version of Tiptap. It has support for a document, with paragraphs and text. That’s it. It’s probably too much for real minimalists though.</p>
+  //         <p>The paragraph extension is not really required, but you need at least one node. Sure, that node can be something different.</p>
+  //         `)
+  //       }
+  //     },
+  //   })
+  // }, [])
 
   if (!editor) return null
 
   return (
-  <div className="p-8 rounded-lg ">
+  <div className="p-8 rounded-xl ">
     <EditorContent editor={editor} className="focus:outline-none" />
   </div>
 

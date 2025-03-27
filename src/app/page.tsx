@@ -3,7 +3,7 @@ import Sidebar from '../components/Sidebar.tsx'
 
 export default function Home() {
   return( 
-    <div className="bg-black flex flex-row h-screen"> 
+    <div className="flex flex-row h-screen"> 
       <div className="bg-[#333333] w-[10%]">
         <Sidebar />
       </div>
