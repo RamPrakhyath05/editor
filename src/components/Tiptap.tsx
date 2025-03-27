@@ -19,7 +19,7 @@ import Link from '@tiptap/extension-link'
 import HardBreak from '@tiptap/extension-hard-break'
 import Highlight from '@tiptap/extension-highlight'
 import Collaboration from '@tiptap/extension-collaboration'
-import { TiptapCollabProvider } from '@hocuspocus/provider'
+// import { TiptapCollabProvider } from '@hocuspocus/provider'
 import * as Y from 'yjs';
 import React, { useEffect, useMemo, useState } from 'react'
 import { WebrtcProvider } from 'y-webrtc'
