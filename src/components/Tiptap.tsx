@@ -23,6 +23,10 @@ import * as Y from 'yjs'
 import React, { useEffect, useMemo } from 'react'
 import { WebrtcProvider } from 'y-webrtc'
 import { IndexeddbPersistence } from 'y-indexeddb'
+import { GoDownload } from "react-icons/go";
+import { format } from 'date-fns';
+import Placeholder from '@tiptap/extension-placeholder'
+
 
 const Editor = () => {
   const ydoc = useMemo(() => new Y.Doc(), [])
@@ -31,7 +35,6 @@ const Editor = () => {
     const webrtcProvider = new WebrtcProvider('collaborative-room', ydoc, { signaling: ['ws://localhost:4444'] })
     const indexeddbProvider = new IndexeddbPersistence('my-document', ydoc)
     
-    // Optional: Log sync events
     webrtcProvider.on('synced', (isSynced) => {
       console.log('WebRTC synced:', isSynced)
     })
@@ -40,17 +43,21 @@ const Editor = () => {
       console.log('IndexedDB sync complete')
     })
 
-    // Cleanup providers on unmount
     return () => {
       webrtcProvider.destroy()
       indexeddbProvider.destroy()
     }
   }, [ydoc])
 
-  // ✅ Create Tiptap editor
   const editor = useEditor({
     extensions: [
       StarterKit.configure({ history: false }),
+      Placeholder.configure({
+          placeholder: 'Start typing...',
+          emptyEditorClass: 'is-editor-empty',
+          showOnlyWhenEditable: true,
+          showOnlyCurrent: false,
+      }),
       Collaboration.configure({ document: ydoc }),
       Paragraph.configure({ HTMLAttributes: { class: 'my-custom-paragraph' } }),
       Text,
@@ -75,17 +82,14 @@ const Editor = () => {
   const saveToPC = () => {
     if (!editor) return
 
-    // Extract Y.Doc content as Markdown
     const json = editor.getJSON()
-
-    // Improved JSON to Markdown converter
     const convertToMarkdown = (json) => {
       const convertNode = (node) => {
         switch (node.type) {
           case 'paragraph':
             return (node.content?.map(convertNode).join('') || '') + '\n\n'
           case 'text': {
-            let text = node.text || ''  // Fallback to empty string
+            let text = node.text || ''  
             if (node.marks) {
               node.marks.forEach((mark) => {
                 if (mark.type === 'bold') text = `**${text}**`
@@ -97,7 +101,7 @@ const Editor = () => {
             return text
           }
           case 'heading': {
-            const level = '#'.repeat(node.attrs.level || 1)  // Fallback to level 1
+            const level = '#'.repeat(node.attrs.level || 1)  
             return `${level} ${(node.content?.map(convertNode).join('') || '')}\n\n`
           }
           case 'bulletList':
@@ -125,22 +129,27 @@ const Editor = () => {
 
     const a = document.createElement('a')
     a.href = url
-    a.download = 'document.md'
+    const date = new Date();
+    a.download = `${format(date,'dd-mm-yyyy')}.md`
     a.click()
 
     URL.revokeObjectURL(url)
   }
   return (
     <div className="p-4 relative h-full">
-      <EditorContent editor={editor} />
+      <div className="h-full overflow-y-auto rounded-lg bg-[#2b2b2b] p-6 tiptap">
+        <EditorContent editor={editor} />
+      </div>
       <button 
-        className="absolute bottom-4 right-4 cursor-pointer rounded-lg bg-indigo-500 w-48 h-10 text-white hover:bg-indigo-400 transition duration-300 text-center hover:scale-105"
+        type="button"
+        className="absolute bottom-6 right-8 cursor-pointer rounded-lg bg-indigo-500 w-12 h-10 text-white hover:bg-indigo-400 transition duration-300 text-center hover:scale-105 flex items-center justify-center gap-2"
+        title="Save as Markdown File"
         onClick={saveToPC}
       >
-        Save as .md file
+        <GoDownload className="text-lg" />
       </button>
     </div>
-  )
+  );
 }
 
 export default Editor
