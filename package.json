@@ -45,7 +45,8 @@
     "y-prosemirror": "^1.2.17",
     "y-protocols": "^1.0.6",
     "y-webrtc": "^10.3.0",
-    "yjs": "^13.6.24"
+    "yjs": "^13.6.24",
+    "zustand": "^5.0.6"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
