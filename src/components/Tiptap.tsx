@@ -27,7 +27,11 @@ import { GoDownload } from 'react-icons/go'
 import { format } from 'date-fns'
 import { useDocStore } from '@/store/docStore'
 
-const EditorComponent = () => {
+// Collaboration
+import { WebrtcProvider } from 'y-webrtc'
+import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
+
+const EditorComponent = ({ username }) => {
   const { docName, setDocName } = useDocStore()
   const [editor, setEditor] = useState<Editor | null>(null)
 
@@ -54,6 +58,12 @@ const EditorComponent = () => {
       }
     })
 
+    const roomName = `webrtc-${docName}`
+    const webrtcProvider = new WebrtcProvider(roomName, ydoc)
+    const user = {
+      name: username || 'Anonymous',
+      color: '#' + Math.floor(Math.random() * 0xffffff).toString(16),
+    }    
     const newEditor = new Editor({
       extensions: [
         StarterKit.configure({ history: false }),
@@ -62,6 +72,10 @@ const EditorComponent = () => {
           emptyEditorClass: 'is-editor-empty',
         }),
         Collaboration.configure({ document: ydoc }),
+        CollaborationCursor.configure({
+          provider: webrtcProvider,
+          user,
+        }),
         Paragraph,
         Text,
         Heading,
@@ -80,9 +94,7 @@ const EditorComponent = () => {
         Highlight,
       ],
       editorProps: {
-        attributes: {
-          class: 'outline-none',
-        },
+        attributes: { class: 'outline-none' },
       },
       autofocus: true,
       content: '',
@@ -92,6 +104,7 @@ const EditorComponent = () => {
 
     return () => {
       provider.destroy()
+      webrtcProvider.destroy()
       newEditor.destroy()
     }
   }, [docName])
@@ -100,15 +113,15 @@ const EditorComponent = () => {
     if (!editor) return
     const json = editor.getJSON()
 
-    const convertToMarkdown = (json) => {
-      const convertNode = (node) => {
+    const convertToMarkdown = (json: any) => {
+      const convertNode = (node: any): string => {
         switch (node.type) {
           case 'paragraph':
             return (node.content?.map(convertNode).join('') || '') + '\n\n'
           case 'text': {
             let text = node.text || ''
             if (node.marks) {
-              node.marks.forEach((mark) => {
+              node.marks.forEach((mark: any) => {
                 if (mark.type === 'bold') text = `**${text}**`
                 if (mark.type === 'italic') text = `*${text}*`
                 if (mark.type === 'strike') text = `~~${text}~~`
@@ -120,9 +133,9 @@ const EditorComponent = () => {
           case 'heading':
             return `${'#'.repeat(node.attrs.level)} ${node.content?.map(convertNode).join('')}\n\n`
           case 'bulletList':
-            return node.content?.map(item => `- ${item.content?.map(convertNode).join('')}`).join('\n') + '\n\n'
+            return node.content?.map((item: any) => `- ${item.content?.map(convertNode).join('')}`).join('\n') + '\n\n'
           case 'orderedList':
-            return node.content?.map((item, i) => `${i + 1}. ${item.content?.map(convertNode).join('')}`).join('\n') + '\n\n'
+            return node.content?.map((item: any, i: number) => `${i + 1}. ${item.content?.map(convertNode).join('')}`).join('\n') + '\n\n'
           case 'blockquote':
             return `> ${node.content?.map(convertNode).join('')}\n\n`
           case 'codeBlock':
@@ -133,7 +146,6 @@ const EditorComponent = () => {
             return node.content?.map(convertNode).join('') || ''
         }
       }
-
       return json.content?.map(convertNode).join('') || ''
     }
 
